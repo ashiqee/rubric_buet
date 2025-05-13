@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { Input } from "@heroui/input";
 
 const defaultCriteria = [
   { name: "Conceptual Framework", weight: 30 },
@@ -30,6 +31,7 @@ const ratingColors = [
 
 export default function RubricTemplateForm({onClose}:{onClose:any}) {
   const [criteria, setCriteria] = useState(defaultCriteria);
+  const [title, setTitle] = useState("Create New Rubric Template");
   const [ratingLevels, setRatingLevels] = useState(defaultRatingLevels);
   const [scores, setScores] = useState<Record<string, number>>({});
 
@@ -52,6 +54,10 @@ const handleCriteriaChange = (
 };
 
 
+  const handleTitleSet = (value: string) => {
+    setTitle(value)
+    
+  };
   const handleRatingChange = (index: number, value: string) => {
     const updated = [...ratingLevels];
     updated[index].label = value;
@@ -167,7 +173,7 @@ const handleCriteriaChange = (
     totalScore: Number(calculateScore()),
     grade: getLetterGrade(Number(calculateScore())),
     createdBy: "663eb8cf58ef0c7c67aa172b", // Replace this with the actual logged-in user ID
-    title: "Rubric Template"
+    title: title
   };
 
   try {
@@ -195,6 +201,21 @@ const handleCriteriaChange = (
     <div className="p-6  rounded-xl shadow space-y-6 overflow-auto">
       <h2 className="text-2xl font-bold">Rubric Evaluation Form</h2>
 
+      <div className="space-y-2">
+      <label htmlFor="rubric-title" className="block text-lg font-semibold text-gray-700">
+        Rubric Title
+      </label>
+      <input
+        id="rubric-title"
+        type="text"
+        name="Title"
+        value={title}
+         className="border w-full px-2 py-1 rounded"
+        onChange={(e) => handleTitleSet(e.target.value)}
+        placeholder="Enter rubric title"
+      />
+    </div>
+
       <div className="flex items-center gap-2">
         <h3 className="text-lg font-semibold">Rating Levels:</h3>
         <button
@@ -207,7 +228,7 @@ const handleCriteriaChange = (
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="grid  grid-cols-1 md:grid-cols-3 flex-wrap gap-2">
         {ratingLevels.map((level, i) => (
           <div key={i} className="border p-2 rounded space-y-2 ">
             <div className="flex  items-center gap-2">
@@ -215,7 +236,7 @@ const handleCriteriaChange = (
                 type="text"
                 value={level.label}
                 onChange={(e) => handleRatingChange(i, e.target.value)}
-                className="border 2xl:w-48 px-2 py-1 rounded"
+                className="border md:w-40 2xl:w-44 px-2 py-1 rounded"
                 placeholder="Label"
               />
               <input
@@ -369,7 +390,8 @@ const handleCriteriaChange = (
       >
         Submit
       </button> */}
-
+<div className="flex justify-end">
+    
       <button
   onClick={(e) => {
     e.preventDefault();
@@ -380,6 +402,7 @@ const handleCriteriaChange = (
 >
   Submit
 </button>
+</div>
 
     </div>
   );
