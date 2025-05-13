@@ -129,14 +129,22 @@ const handleCriteriaChange = (
     setScores(cleanedScores);
   };
 
-  const calculateScore = () => {
-    let total = 0;
-    criteria.forEach(({ name, weight }) => {
-      const value = scores[name];
+ const calculateScore = () => {
+  let total = 0;
+
+  criteria.forEach(({ name, weight }) => {
+    const value = scores[name]; // Might be undefined
+
+    if (typeof value === "number") {
       total += (value / 100) * weight;
-    });
-    return total.toFixed(2);
-  };
+    } else {
+      console.warn(`No score selected for ${name}`);
+    }
+  });
+
+  return total.toFixed(2);
+};
+
 
   const getLetterGrade = (score: number) => {
     if (score >= 80) return "A+";
@@ -150,8 +158,11 @@ const handleCriteriaChange = (
     return "F";
   };
 
+
+  console.log(calculateScore());
+  
   return (
-    <div className="p-6 bg-white rounded-xl shadow space-y-6 overflow-auto">
+    <div className="p-6  rounded-xl shadow space-y-6 overflow-auto">
       <h2 className="text-2xl font-bold">Rubric Evaluation Form</h2>
 
       <div className="flex items-center gap-2">
@@ -215,8 +226,8 @@ const handleCriteriaChange = (
       <table className="w-full border mt-4 text-sm">
         <thead>
           <tr>
-            <th className="border p-2 bg-gray-100">Criteria</th>
-            <th className="border p-2 bg-gray-100">Weight</th>
+            <th className="border p-2 light:bg-gray-100">Criteria</th>
+            <th className="border p-2 light:bg-gray-100">Weight</th>
             {ratingLevels.map((level, i) => (
               <th
                 key={level.label}
