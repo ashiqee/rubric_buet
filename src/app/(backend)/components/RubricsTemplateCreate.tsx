@@ -28,7 +28,7 @@ const ratingColors = [
   "bg-rose-600 text-white",
 ];
 
-export default function RubricForm() {
+export default function RubricTemplateForm({onClose}:{onClose:any}) {
   const [criteria, setCriteria] = useState(defaultCriteria);
   const [ratingLevels, setRatingLevels] = useState(defaultRatingLevels);
   const [scores, setScores] = useState<Record<string, number>>({});
@@ -159,7 +159,37 @@ const handleCriteriaChange = (
   };
 
 
-  console.log(calculateScore());
+  const handleSaveRubric = async () => {
+  const rubricData = {
+    criteria,
+    ratingLevels,
+    scores,
+    totalScore: Number(calculateScore()),
+    grade: getLetterGrade(Number(calculateScore())),
+    createdBy: "663eb8cf58ef0c7c67aa172b", // Replace this with the actual logged-in user ID
+    title: "Rubric Template"
+  };
+
+  try {
+    const res = await fetch("/api/rubrics", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rubricData),
+    });
+
+    if (!res.ok) throw new Error("Failed to save rubric");
+
+    const data = await res.json();
+    alert("Rubric saved successfully!");
+    console.log("Saved rubric:", data);
+  } catch (error) {
+    console.error("Save error:", error);
+    alert("Error saving rubric");
+  }
+};
+
   
   return (
     <div className="p-6  rounded-xl shadow space-y-6 overflow-auto">
@@ -328,7 +358,7 @@ const handleCriteriaChange = (
         </div>
       </div>
 
-      <button
+      {/* <button
         onClick={(e) => {
           e.preventDefault();
           alert(
@@ -338,7 +368,19 @@ const handleCriteriaChange = (
         className="w-fit bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
       >
         Submit
-      </button>
+      </button> */}
+
+      <button
+  onClick={(e) => {
+    e.preventDefault();
+    handleSaveRubric(); // call save handler
+    onClose()
+  }}
+  className="w-fit bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
+>
+  Submit
+</button>
+
     </div>
   );
 }
