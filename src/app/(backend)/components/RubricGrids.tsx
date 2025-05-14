@@ -1,7 +1,6 @@
 // components/RubricsGrids.tsx
 // This is a Server Component
 
-import RubricCard from "./cards/RubricCard";
 import RubricEditModal from "./modals/RubricEditModal";
 
 export type Rubric = {
@@ -22,25 +21,32 @@ export type Rubric = {
   grade: string;
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
- 
 };
-
 
 export default async function RubricsGrids() {
   const res = await fetch("http://localhost:3000/api/rubrics", {
     cache: "no-store", // or 'force-cache' if you want caching
+    next:{revalidate:2000}
   });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch rubrics");
+ 
+  if(!res?.ok){
+    return <>No Created Rubric Template</>
   }
-
-  const rubrics: Rubric[] = await res.json();
+  const rubrics: Rubric[] = await res?.json();
 
   return (
-    <div className="">
-     <RubricEditModal rubrics={rubrics}/>
-
-    </div>
+    <>
+      {!rubrics ? (
+        <> No Created Rubric Template</>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 my-6 lg:grid-cols-4 gap-4">
+          {rubrics?.map((rubric: Rubric) => (
+            <div key={rubric._id} className="w-full">
+              <RubricEditModal rubric={rubric} />
+            </div>
+          ))}
+        </div>
+      )}
+    </>
   );
 }

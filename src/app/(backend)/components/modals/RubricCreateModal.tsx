@@ -15,7 +15,7 @@ export default function RubricCreateModal() {
 
   return (
     <>
-      <Button onPress={onOpen}>Create New Rubric</Button>
+      <Button className="w-fit" onPress={onOpen}>Create New Rubric</Button>
       <Modal size="5xl" className="container mx-auto" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { Input } from "@heroui/input";
+
 
 const defaultCriteria = [
   { name: "Conceptual Framework", weight: 30 },
@@ -29,37 +29,38 @@ const ratingColors = [
   "bg-rose-600 text-white",
 ];
 
-export default function RubricTemplateForm({onClose}:{onClose:any}) {
-  const [criteria, setCriteria] = useState(defaultCriteria);
-  const [title, setTitle] = useState("Create New Rubric Template");
-  const [ratingLevels, setRatingLevels] = useState(defaultRatingLevels);
-  const [scores, setScores] = useState<Record<string, number>>({});
+export default function RubricTemplateEditForm({
+  rubric,
+  onClose,
+}: {
+  rubric: any;
+  onClose: any;
+}) {
+  const [criteria, setCriteria] = useState(rubric.criteria);
+  const [title, setTitle] = useState(rubric.title);
+  const [ratingLevels, setRatingLevels] = useState(rubric.ratingLevels);
+  const [scores, setScores] = useState<Record<string, number>>(rubric.scores);
 
   const handleSelect = (criterion: string, value: number) => {
     setScores((prev) => ({ ...prev, [criterion]: value }));
   };
 
-console.log(ratingLevels);
-
-
-const handleCriteriaChange = (
-  index: number,
-  field: "name" | "weight",
-  value: string
-) => {
-  const updated = [...criteria];
-  if (field === "weight") {
-    updated[index].weight = Number(value);
-  } else {
-    updated[index].name = value;
-  }
-  setCriteria(updated);
-};
-
+  const handleCriteriaChange = (
+    index: number,
+    field: "name" | "weight",
+    value: string
+  ) => {
+    const updated = [...criteria];
+    if (field === "weight") {
+      updated[index].weight = Number(value);
+    } else {
+      updated[index].name = value;
+    }
+    setCriteria(updated);
+  };
 
   const handleTitleSet = (value: string) => {
-    setTitle(value)
-    
+    setTitle(value);
   };
   const handleRatingChange = (index: number, value: string) => {
     const updated = [...ratingLevels];
@@ -67,30 +68,15 @@ const handleCriteriaChange = (
     setRatingLevels(updated);
   };
 
-const handleRangeValueChange = (
-  levelIndex: number,
-  valueIndex: number,
-  newValue: string
-) => {
-  const updated = [...ratingLevels];
-  const rangeValue = Number(newValue);
-
-  if (isNaN(rangeValue)) return;
-
-  const level = updated[levelIndex];
-  const newRange = [...level.range];
-
-  newRange[valueIndex] = rangeValue;
-  updated[levelIndex] = {
-    ...level,
-    range: newRange,
-    count: newRange.length, // sync count to actual range length
+  const handleRangeValueChange = (
+    levelIndex: number,
+    valueIndex: number,
+    newValue: string
+  ) => {
+    const updated = [...ratingLevels];
+    updated[levelIndex].range[valueIndex] = Number(newValue);
+    setRatingLevels(updated);
   };
-  console.log(updated,"Updated");
-  
-
-  setRatingLevels(updated);
-};
 
   const handleCountChange = (index: number, newCountStr: string) => {
     const newCount = Number(newCountStr);
@@ -153,22 +139,21 @@ const handleRangeValueChange = (
     setScores(cleanedScores);
   };
 
- const calculateScore = () => {
-  let total = 0;
+  const calculateScore = () => {
+    let total = 0;
 
-  criteria.forEach(({ name, weight }) => {
-    const value = scores[name]; // Might be undefined
+    criteria.forEach(({ name, weight }:{name:string,weight:number}) => {
+      const value = scores[name]; // Might be undefined
 
-    if (typeof value === "number") {
-      total += (value / 100) * weight;
-    } else {
-      console.warn(`No score selected for ${name}`);
-    }
-  });
+      if (typeof value === "number") {
+        total += (value / 100) * weight;
+      } else {
+        console.warn(`No score selected for ${name}`);
+      }
+    });
 
-  return total.toFixed(2);
-};
-
+    return total.toFixed(2);
+  };
 
   const getLetterGrade = (score: number) => {
     if (score >= 80) return "A+";
@@ -182,57 +167,59 @@ const handleRangeValueChange = (
     return "F";
   };
 
-
-  const handleSaveRubric = async () => {
+ const handleUpdateRubric = async (rubricId: string) => {
   const rubricData = {
     criteria,
     ratingLevels,
     scores,
     totalScore: Number(calculateScore()),
     grade: getLetterGrade(Number(calculateScore())),
-    createdBy: "663eb8cf58ef0c7c67aa172b", // Replace this with the actual logged-in user ID
-    title: title
+    createdBy: "663eb8cf58ef0c7c67aa172b", // Replace this with actual logged-in user ID
+    title,
   };
 
   try {
-    const res = await fetch("/api/rubrics", {
-      method: "POST",
+    const res = await fetch(`/api/rubrics/${rubricId}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(rubricData),
     });
 
-    if (!res.ok) throw new Error("Failed to save rubric");
+    if (!res.ok) throw new Error("Failed to update rubric");
 
     const data = await res.json();
-    alert("Rubric saved successfully!");
-    console.log("Saved rubric:", data);
+    alert("Rubric updated successfully!");
+    // console.log("Updated rubric:", data);
   } catch (error) {
-    console.error("Save error:", error);
-    alert("Error saving rubric");
+    console.error("Update error:", error);
+    alert("Error updating rubric");
   }
 };
 
-  
+
   return (
     <div className="p-6  rounded-xl shadow space-y-6 overflow-auto">
       <h2 className="text-2xl font-bold">Rubric Evaluation Form</h2>
 
       <div className="space-y-2">
-      <label htmlFor="rubric-title" className="block text-lg font-semibold text-gray-700">
-        Rubric Title
-      </label>
-      <input
-        id="rubric-title"
-        type="text"
-        name="Title"
-        value={title}
-         className="border w-full px-2 py-1 rounded"
-        onChange={(e) => handleTitleSet(e.target.value)}
-        placeholder="Enter rubric title"
-      />
-    </div>
+        <label
+          htmlFor="rubric-title"
+          className="block text-lg font-semibold text-gray-700"
+        >
+          Rubric Title
+        </label>
+        <input
+          id="rubric-title"
+          type="text"
+          name="Title"
+          value={title}
+          className="border w-full px-2 py-1 rounded"
+          onChange={(e) => handleTitleSet(e.target.value)}
+          placeholder="Enter rubric title"
+        />
+      </div>
 
       <div className="flex items-center gap-2">
         <h3 className="text-lg font-semibold">Rating Levels:</h3>
@@ -247,7 +234,7 @@ const handleRangeValueChange = (
       </div>
 
       <div className="grid  grid-cols-1 md:grid-cols-3 flex-wrap gap-2">
-        {ratingLevels.map((level, i) => (
+        {ratingLevels.map((level:any, i:any) => (
           <div key={i} className="border p-2 rounded space-y-2 ">
             <div className="flex  items-center gap-2">
               <input
@@ -278,11 +265,10 @@ const handleRangeValueChange = (
 
             <div className="flex items-center flex-wrap gap-2">
               Range:
-              {level.range.map((val, j) => (
+              {level.range.map((val:any, j:any) => (
                 <input
                   key={j}
                   type="number"
-                  min={0}
                   value={val}
                   onChange={(e) => handleRangeValueChange(i, j, e.target.value)}
                   className="w-16 border px-2 py-1 rounded"
@@ -298,7 +284,7 @@ const handleRangeValueChange = (
           <tr>
             <th className="border p-2 light:bg-gray-100">Criteria</th>
             <th className="border p-2 light:bg-gray-100">Weight</th>
-            {ratingLevels.map((level, i) => (
+            {ratingLevels.map((level:any, i:any) => (
               <th
                 key={level.label}
                 className={`border p-2 text-center ${ratingColors[i % ratingColors.length]}`}
@@ -310,7 +296,7 @@ const handleRangeValueChange = (
           </tr>
         </thead>
         <tbody>
-          {criteria.map((c, i) => (
+          {criteria.map((c:any, i:any) => (
             <tr key={i}>
               <td className="border p-2">
                 <input
@@ -336,35 +322,31 @@ const handleRangeValueChange = (
                 />
               </td>
 
-             {ratingLevels.map((level, j) => (
-  <td key={j} className="border text-center">
-    <div className="flex justify-center gap-1">
-      {level.range.map((val, k) => {
-        const key = `level-${j}-val-${val}-${k}`; // ensure stable unique key
-        return (
-          <label
-            key={key}
-            className={`inline-block w-5 h-5 rounded cursor-pointer border-2 ${
-              scores[c.name] === val
-                ? `${ratingColors[j % ratingColors.length]} border-black`
-                : "border-gray-300"
-            }`}
-          >
-            <input
-              type="radio"
-              name={`criteria-${i}`}
-              value={val}
-              checked={scores[c.name] === val}
-              onChange={() => handleSelect(c.name, val)}
-              className="sr-only"
-            />
-          </label>
-        );
-      })}
-    </div>
-  </td>
-))}
-
+              {ratingLevels.map((level:any, j:any) => (
+                <td key={j} className="border text-center">
+                  <div className="flex justify-center gap-1">
+                    {level.range.map((val:any, k:any) => (
+                      <label
+                        key={val}
+                        className={`inline-block w-5 h-5 rounded cursor-pointer border-2 ${
+                          scores[c.name] === val
+                            ? `${ratingColors[j % ratingColors.length]} border-black`
+                            : "border-gray-300"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name={`criteria-${i}`}
+                          value={val}
+                          checked={scores[c.name] === val}
+                          onChange={() => handleSelect(c.name, val)}
+                          className="sr-only"
+                        />
+                      </label>
+                    ))}
+                  </div>
+                </td>
+              ))}
 
               <td className="border text-center">
                 <button
@@ -413,20 +395,18 @@ const handleRangeValueChange = (
       >
         Submit
       </button> */}
-<div className="flex justify-end">
-    
-      <button
-  onClick={(e) => {
-    e.preventDefault();
-    handleSaveRubric(); // call save handler
-    onClose()
-  }}
-  className="w-fit bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
->
-  Submit
-</button>
-</div>
-
+      <div className="flex justify-end">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            handleUpdateRubric(rubric._id); // call save handler
+            onClose();
+          }}
+          className="w-fit bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
+        >
+          Update
+        </button>
+      </div>
     </div>
   );
 }

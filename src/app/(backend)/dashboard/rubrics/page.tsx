@@ -4,7 +4,7 @@ import RubricsTemplateCreate from "../../components/RubricsTemplateCreate";
 
 export default function RubricsPage() {
   return (
-    <div>
+    <div className="flex flex-col gap-3">
 
       <RubricCreateModal/>
        <RubricsGrids/> 

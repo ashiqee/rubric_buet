@@ -2,7 +2,7 @@ export default function RubricCard({rubric}:{rubric:any}) {
     return (
          <div
          
-          className="rounded-xl border p-4 h-44 shadow hover:shadow-md transition"
+          className="border rounded-xl w-full  p-4 h-44 shadow hover:shadow-md transition"
         >
           <h3 className="text-lg font-semibold">{rubric.title}</h3>
           {rubric.description && (
