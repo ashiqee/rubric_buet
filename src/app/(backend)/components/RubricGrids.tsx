@@ -26,7 +26,7 @@ export type Rubric = {
 export default async function RubricsGrids() {
   const res = await fetch("http://localhost:3000/api/rubrics", {
     cache: "no-store", // or 'force-cache' if you want caching
-    next:{revalidate:2000}
+    // next:{revalidate:2000}
   });
  
   if(!res?.ok){

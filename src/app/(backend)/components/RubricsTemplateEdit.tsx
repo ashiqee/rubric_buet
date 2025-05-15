@@ -36,6 +36,7 @@ export default function RubricTemplateEditForm({
   rubric: any;
   onClose: any;
 }) {
+  
   const [criteria, setCriteria] = useState(rubric.criteria);
   const [title, setTitle] = useState(rubric.title);
   const [ratingLevels, setRatingLevels] = useState(rubric.ratingLevels);
@@ -174,7 +175,6 @@ export default function RubricTemplateEditForm({
     scores,
     totalScore: Number(calculateScore()),
     grade: getLetterGrade(Number(calculateScore())),
-    createdBy: "663eb8cf58ef0c7c67aa172b", // Replace this with actual logged-in user ID
     title,
   };
 
@@ -191,6 +191,7 @@ export default function RubricTemplateEditForm({
 
     const data = await res.json();
     alert("Rubric updated successfully!");
+    // setRubric(data)
     // console.log("Updated rubric:", data);
   } catch (error) {
     console.error("Update error:", error);

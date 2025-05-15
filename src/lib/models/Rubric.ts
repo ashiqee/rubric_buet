@@ -29,4 +29,6 @@ const RubricSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export const Rubric = mongoose.model('Rubric', RubricSchema);
+export const Rubric =
+  mongoose.models.Rubric || mongoose.model('Rubric', RubricSchema);
+

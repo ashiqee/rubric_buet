@@ -10,9 +10,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   try {
     const body = await req.json();
 
-    console.log(body);
+    const rubricId =  params.id
     
-    const updatedRubric = await Rubric.findByIdAndUpdate(params.id, body, {
+    console.log(rubricId,"IDDDD-----");
+    
+    const updatedRubric = await Rubric.findByIdAndUpdate(rubricId, body, {
       new: true,
       runValidators: true,
     });
