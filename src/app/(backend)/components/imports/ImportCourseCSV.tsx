@@ -45,10 +45,25 @@ export default function ImportCourseCSV() {
     });
   };
 
-  const handleImport = () => {
-    console.log("Importing Courses:", courses);
-    // Submit to API here if needed
-  };
+ const handleImport = async () => {
+  try {
+    const responses = await Promise.all(
+      courses.map((course) =>
+        fetch("/api/courses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(course),
+        })
+      )
+    );
+
+    const results = await Promise.all(responses.map(res => res.json()));
+    alert("Succesfully Imported Courses")
+    console.log("Imported Courses:", results);
+  } catch (error) {
+    console.error("Import failed", error);
+  }
+};
 
   const sampleCSV = `c_CourseTitle,c_CourseID,c_Group,c_CourseProgram,c_OfferTo,c_CourseType,c_Credits,c_CreditHours,c_Prerequisite\n`;
 
