@@ -2,9 +2,9 @@
 
 import { Button } from "@heroui/button";
 import { Input, Textarea } from "@heroui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const courseTypes = ["Core Sessional", "Core Theory", "Elective"];
+const courseTypes = ["Core Sessional", "Core Theory", "Optional Sessional"];
 const programs = ["Undergraduate", "Postgraduate"];
 const c_OfferTo = ["B.Arch", "M.Arch", "Ms.Arch"];
 const groups = [
@@ -18,10 +18,21 @@ const groups = [
   "Level IV, Term II",
   "Level V, Term I",
   "Level V, Term II",
-  "Others",
+  "EE",
+  "SYN",
+  "UDL",
+  "HTC",
+  "HS",
+  "CT",
 ];
 
-export default function CreateCourseForm({onClose}:{onClose:any}) {
+export default function StudentDataEditForm({
+  onClose,
+  course,
+}: {
+  onClose: () => void;
+  course: any;
+}) {
   const [form, setForm] = useState({
     c_CourseTitle: "",
     c_CourseID: "",
@@ -34,6 +45,13 @@ export default function CreateCourseForm({onClose}:{onClose:any}) {
     c_Prerequisite: "",
   });
 
+  // Sync course prop into local state
+  useEffect(() => {
+    if (course) {
+      setForm(course);
+    }
+  }, [course]);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -42,39 +60,35 @@ export default function CreateCourseForm({onClose}:{onClose:any}) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  console.log("Course to Create:", form);
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  try {
-    const response = await fetch("/api/courses", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      if (!course._id) {
+        alert("Missing course ID for update.");
+        return;
+      }
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const response = await fetch(`/api/courses/${course._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      alert("Successfully updated course!");
+      onClose();
+    } catch (error) {
+      console.error("Course update failed:", error);
+      alert("Course update failed. Please try again.");
     }
-
-    const result = await response.json();
-
-    alert("Successfully created course!");
-    
-    onClose()
-    
-    // Optionally reset the form
-    // setForm(initialFormState);
-    
-  } catch (error) {
-    console.error("Course creation failed:", error);
-    alert("Course creation failed. Please try again.");
-  }
-};
-
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4 p-4">
+    <form onSubmit={handleUpdate} className="grid grid-cols-2 gap-4 p-4">
       <Input
         label="Course Title"
         name="c_CourseTitle"
@@ -170,7 +184,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       />
 
       <Button type="submit" className="col-span-2 w-full">
-        Create Course
+        Update Course
       </Button>
     </form>
   );

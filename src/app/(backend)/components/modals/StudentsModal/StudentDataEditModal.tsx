@@ -8,22 +8,30 @@ import {
   Button,
   useDisclosure,
 } from "@heroui/react";
-import CreateCourseForm from "../../form/CreateCourseForm";
+
+import { FiEdit } from "react-icons/fi";
+import CourseEditForm from "../../form/CourseEditForm";
 
 
-export default function CourseCreateModal() {
+export default function StudentDataEditModal({course}:{course:any}) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
   return (
     <>
-      <Button className="w-fit" onPress={onOpen}>Create New Course</Button>
+       <button
+            onClick={onOpen}
+            className="text-blue-600 hover:text-blue-800"
+            title="Edit"
+          >
+            <FiEdit size={18} />
+          </button>
       <Modal size="5xl" className="container mx-auto" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
              
               <ModalBody>
-<CreateCourseForm onClose={onClose}/>
+<CourseEditForm course={course} onClose={onClose}/>
                
               </ModalBody>
               

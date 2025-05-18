@@ -17,7 +17,7 @@ type Course = {
   c_Prerequisite: string;
 };
 
-export default function ImportCourseCSV() {
+export default function ImportCourseCSV({onClose}:{onClose:any}) {
   const [courses, setCourses] = useState<Course[]>([]);
   const [fileName, setFileName] = useState<string>("");
 
@@ -60,6 +60,7 @@ export default function ImportCourseCSV() {
     const results = await Promise.all(responses.map(res => res.json()));
     alert("Succesfully Imported Courses")
     console.log("Imported Courses:", results);
+    onClose()
   } catch (error) {
     console.error("Import failed", error);
   }
@@ -80,8 +81,9 @@ export default function ImportCourseCSV() {
   };
 
   return (
-    <div className="p-4 border rounded-lg space-y-4 w-full">
+    <div className="p-4 border rounded-lg space-y-4 w-full ">
       <div>
+        <h2 className="text-center font-bold text-2xl" >Bulk course upload</h2>
         <div className="flex items-center justify-between">
           <label className="block text-sm font-medium mb-1">
             Upload CSV File
@@ -89,7 +91,7 @@ export default function ImportCourseCSV() {
           <div>
             <button
               onClick={handleDownloadTemplate}
-              className="text-sm font-medium mb-1"
+              className="text-sm text-blue-400 font-medium mb-1"
             >
               Example CSV
             </button>
@@ -108,14 +110,9 @@ export default function ImportCourseCSV() {
 
       {courses.length > 0 && (
         <>
-          <div className="space-y-2">
-            <p className="text-sm">{courses.length} courses loaded.</p>
-            <Button className="w-fit" onPress={handleImport}>
-              Import Courses
-            </Button>
-          </div>
+          
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto h-[60vh]">
             <table className="min-w-full border text-sm text-left mt-4">
               <thead className="bg-gray-100">
                 <tr>
@@ -152,6 +149,15 @@ export default function ImportCourseCSV() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          <div className=" w-full flex justify-end">
+           <div className="space-y-2">
+             <p className="text-sm">{courses.length} courses loaded.</p>
+            <Button className="w-fit" onPress={handleImport}>
+              Import Courses
+            </Button>
+           </div>
           </div>
         </>
       )}

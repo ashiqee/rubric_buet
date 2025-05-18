@@ -21,7 +21,7 @@ const groups = [
   "Others",
 ];
 
-export default function CreateCourseForm({onClose}:{onClose:any}) {
+export default function StudentAddForm({onClose}:{onClose:any}) {
   const [form, setForm] = useState({
     c_CourseTitle: "",
     c_CourseID: "",
@@ -170,7 +170,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       />
 
       <Button type="submit" className="col-span-2 w-full">
-        Create Course
+        Add New Student
       </Button>
     </form>
   );

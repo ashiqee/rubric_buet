@@ -8,22 +8,23 @@ import {
   Button,
   useDisclosure,
 } from "@heroui/react";
-import CreateCourseForm from "../../form/CreateCourseForm";
+
+import StudentAddForm from "../../form/StudentAddForm";
 
 
-export default function CourseCreateModal() {
+export default function StudentAddModal() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
   return (
     <>
-      <Button className="w-fit" onPress={onOpen}>Create New Course</Button>
+      <Button className="w-fit" onPress={onOpen}>Add New Student</Button>
       <Modal size="5xl" className="container mx-auto" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
              
               <ModalBody>
-<CreateCourseForm onClose={onClose}/>
+<StudentAddForm onClose={onClose}/>
                
               </ModalBody>
               

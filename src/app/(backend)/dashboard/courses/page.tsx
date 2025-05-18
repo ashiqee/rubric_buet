@@ -2,20 +2,26 @@
 
 import ImportCourseCSV from "../../components/imports/ImportCourseCSV";
 import CourseCreateModal from "../../components/modals/courseModal/CourseCreateModal";
+import CourseImportModal from "../../components/modals/courseModal/CourseimportModal";
+import CoursesTable from "../../components/tables/CoursesTable";
 
 export default function CoursesPage() {
   
 
   return (
-    <div className="p-4 space-y-4">
+   <div>
+     <div className="p-4 flex gap-2">
       {/* Course creation modal */}
       <CourseCreateModal />
 
       {/* Import & Template Download */}
-      <div className=" flex gap-3 items-center">
-        <ImportCourseCSV />
+    
+       <CourseImportModal/>
       
-      </div>
+    
     </div>
+
+    <CoursesTable/>
+   </div>
   );
 }
