@@ -11,9 +11,10 @@ import {
 
 import { FiEdit } from "react-icons/fi";
 import CourseEditForm from "../../form/CourseEditForm";
+import StudentDataEditForm from "../../form/StudentDataEditForm";
 
 
-export default function StudentDataEditModal({course}:{course:any}) {
+export default function StudentDataEditModal({student}:{student:any}) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
   return (
@@ -31,7 +32,7 @@ export default function StudentDataEditModal({course}:{course:any}) {
             <>
              
               <ModalBody>
-<CourseEditForm course={course} onClose={onClose}/>
+<StudentDataEditForm student={student} onClose={onClose}/>
                
               </ModalBody>
               

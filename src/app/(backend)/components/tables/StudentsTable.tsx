@@ -121,7 +121,7 @@ const handleDelete = async (id: string) => {
       
       <td className="px-3 py-2 border">
         <div className="flex items-center space-x-2">
-            <StudentDataEditModal course={course}/>
+            <StudentDataEditModal student={student}/>
          
           <button
             onClick={() => handleDelete(student._id)}

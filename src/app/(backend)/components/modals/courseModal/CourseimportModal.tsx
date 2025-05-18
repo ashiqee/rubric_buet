@@ -23,7 +23,9 @@ export default function CourseImportModal() {
           {(onClose) => (
             <>
              
-              <ModalBody className="container my-8 rounded-md bg-gray-50 mx-auto">
+              <ModalBody className="container relative my-8 rounded-md bg-gray-50 mx-auto">
+                   <h2 className="text-center my-4 font-bold text-2xl" >Bulk course upload</h2>
+                 <button className="absolute top-1 right-1 hover:bg-gray-400 p-1.5 px-3 hover:text-gray-100 text-gray-400 rounded-full " onClick={()=>onClose()} >X</button>
                  <ImportCourseCSV onClose={onClose} />
 
                

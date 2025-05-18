@@ -81,9 +81,9 @@ export default function ImportCourseCSV({onClose}:{onClose:any}) {
   };
 
   return (
-    <div className="p-4 border rounded-lg space-y-4 w-full ">
-      <div>
-        <h2 className="text-center font-bold text-2xl" >Bulk course upload</h2>
+    <div className="p-4  border rounded-lg space-y-4 w-full ">
+      <div className="relative">
+      
         <div className="flex items-center justify-between">
           <label className="block text-sm font-medium mb-1">
             Upload CSV File
@@ -97,6 +97,8 @@ export default function ImportCourseCSV({onClose}:{onClose:any}) {
             </button>
           </div>
         </div>
+
+       
         <Input
           type="file"
           accept=".csv"

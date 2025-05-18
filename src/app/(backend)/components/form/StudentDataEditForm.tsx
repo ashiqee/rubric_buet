@@ -28,10 +28,10 @@ const groups = [
 
 export default function StudentDataEditForm({
   onClose,
-  course,
+  student,
 }: {
   onClose: () => void;
-  course: any;
+  student: any;
 }) {
   const [form, setForm] = useState({
     c_CourseTitle: "",
@@ -47,10 +47,10 @@ export default function StudentDataEditForm({
 
   // Sync course prop into local state
   useEffect(() => {
-    if (course) {
-      setForm(course);
+    if (student) {
+      setForm(student);
     }
-  }, [course]);
+  }, [student]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -64,12 +64,12 @@ export default function StudentDataEditForm({
     e.preventDefault();
 
     try {
-      if (!course._id) {
+      if (!student._id) {
         alert("Missing course ID for update.");
         return;
       }
 
-      const response = await fetch(`/api/courses/${course._id}`, {
+      const response = await fetch(`/api/courses/${student._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
