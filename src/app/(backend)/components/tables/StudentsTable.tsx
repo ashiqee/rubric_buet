@@ -26,7 +26,7 @@ export default function StudentsTable() {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const res = await fetch("/api/Students");
+        const res = await fetch("/api/students");
         if (!res.ok) throw new Error("Failed to fetch Students");
         const data = await res.json();
         setStudents(data);
