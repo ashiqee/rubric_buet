@@ -1,11 +1,13 @@
 'use client';
 
-import { Assessment, Rubric } from '@/types/models';
 import { useEffect, useState } from 'react';
-import { fetchRubrics } from '../../lib/api';
 import Select from 'react-select';
 import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
+
+import { fetchRubrics } from '../../lib/api';
+
+import { Assessment, Rubric } from '@/types/models';
 
 interface OptionType {
   value: string;
@@ -30,6 +32,7 @@ export default function AssessmentManager({
 
   const updateAssessment = (index: number, updated: Assessment) => {
     const newList = [...assessments];
+
     newList[index] = updated;
     setAssessments(newList);
     onChange(newList);
@@ -43,17 +46,17 @@ export default function AssessmentManager({
 
   return (
     <div className="space-y-4">
-      <Button variant="bordered" size="sm"  onPress={addAssessment}>Add Assessment +</Button>
+      <Button size="sm" variant="bordered"  onPress={addAssessment}>Add Assessment +</Button>
 
       {assessments.map((a, idx) => (
         <div key={idx} className="border p-4 rounded-md space-y-3 bg-white shadow-sm">
           <Input
-            label="Assessment Name"
-      
-            placeholder="e.g., Report, Jury, Prelli"
             className='border rounded-md '
-            variant='underlined'
+      
+            label="Assessment Name"
+            placeholder="e.g., Report, Jury, Prelli"
             value={a.name}
+            variant='underlined'
             onChange={(e) =>
               updateAssessment(idx, { ...a, name: e.target.value })
             }
@@ -64,8 +67,10 @@ export default function AssessmentManager({
               Select Rubric
             </label> */}
             <Select
-              placeholder="Search and select a Rubric"
+              isClearable
+              isSearchable
               options={rubricOptions}
+              placeholder="Search and select a Rubric"
               value={rubricOptions.find((r) => r.value === a.rubricId) || null}
               onChange={(selected) =>
                 updateAssessment(idx, {
@@ -73,8 +78,6 @@ export default function AssessmentManager({
                   rubricId: selected?.value || '',
                 })
               }
-              isClearable
-              isSearchable
             />
           </div>
         </div>

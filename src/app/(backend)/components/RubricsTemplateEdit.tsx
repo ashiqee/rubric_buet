@@ -52,6 +52,7 @@ export default function RubricTemplateEditForm({
     value: string
   ) => {
     const updated = [...criteria];
+
     if (field === "weight") {
       updated[index].weight = Number(value);
     } else {
@@ -65,6 +66,7 @@ export default function RubricTemplateEditForm({
   };
   const handleRatingChange = (index: number, value: string) => {
     const updated = [...ratingLevels];
+
     updated[index].label = value;
     setRatingLevels(updated);
   };
@@ -75,12 +77,14 @@ export default function RubricTemplateEditForm({
     newValue: string
   ) => {
     const updated = [...ratingLevels];
+
     updated[levelIndex].range[valueIndex] = Number(newValue);
     setRatingLevels(updated);
   };
 
   const handleCountChange = (index: number, newCountStr: string) => {
     const newCount = Number(newCountStr);
+
     if (isNaN(newCount) || newCount <= 0) return;
 
     const updated = [...ratingLevels];
@@ -108,6 +112,7 @@ export default function RubricTemplateEditForm({
 
   const removeCriterion = (index: number) => {
     const updated = [...criteria];
+
     updated.splice(index, 1);
     setCriteria(updated);
   };
@@ -128,6 +133,7 @@ export default function RubricTemplateEditForm({
       return alert("At least two rating levels are required.");
 
     const updated = [...ratingLevels];
+
     updated.splice(index, 1);
     setRatingLevels(updated);
 
@@ -137,6 +143,7 @@ export default function RubricTemplateEditForm({
         updated.some((r) => r.range.includes(v)) ? [k, v] : [k, 0]
       )
     );
+
     setScores(cleanedScores);
   };
 
@@ -165,6 +172,7 @@ export default function RubricTemplateEditForm({
     if (score >= 55) return "B-";
     if (score >= 50) return "C";
     if (score >= 45) return "D";
+
     return "F";
   };
 
@@ -190,6 +198,7 @@ export default function RubricTemplateEditForm({
     if (!res.ok) throw new Error("Failed to update rubric");
 
     const data = await res.json();
+
     alert("Rubric updated successfully!");
     // setRubric(data)
     // console.log("Updated rubric:", data);
@@ -206,28 +215,28 @@ export default function RubricTemplateEditForm({
 
       <div className="space-y-2">
         <label
-          htmlFor="rubric-title"
           className="block text-lg font-semibold text-gray-700"
+          htmlFor="rubric-title"
         >
           Rubric Title
         </label>
         <input
-          id="rubric-title"
-          type="text"
-          name="Title"
-          value={title}
           className="border w-full px-2 py-1 rounded"
-          onChange={(e) => handleTitleSet(e.target.value)}
+          id="rubric-title"
+          name="Title"
           placeholder="Enter rubric title"
+          type="text"
+          value={title}
+          onChange={(e) => handleTitleSet(e.target.value)}
         />
       </div>
 
       <div className="flex items-center gap-2">
         <h3 className="text-lg font-semibold">Rating Levels:</h3>
         <button
+          className="flex items-center gap-1 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm"
           type="button"
           onClick={addRatingLevel}
-          className="flex items-center gap-1 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm"
         >
           <PlusIcon className="w-4 h-4" />
           Add Rating
@@ -239,25 +248,25 @@ export default function RubricTemplateEditForm({
           <div key={i} className="border p-2 rounded space-y-2 ">
             <div className="flex  items-center gap-2">
               <input
+                className="border md:w-40 2xl:w-44 px-2 py-1 rounded"
+                placeholder="Label"
                 type="text"
                 value={level.label}
                 onChange={(e) => handleRatingChange(i, e.target.value)}
-                className="border md:w-40 2xl:w-44 px-2 py-1 rounded"
-                placeholder="Label"
               />
               <input
-                type="number"
+                className="w-16 border px-2 py-1 rounded"
                 min={1}
+                placeholder="Count"
+                type="number"
                 value={level.count}
                 onChange={(e) => handleCountChange(i, e.target.value)}
-                className="w-16 border px-2 py-1 rounded"
-                placeholder="Count"
               />
               {ratingLevels.length > 2 && (
                 <button
+                  className="text-red-500 hover:text-red-700"
                   type="button"
                   onClick={() => removeRatingLevel(i)}
-                  className="text-red-500 hover:text-red-700"
                 >
                   <TrashIcon className="w-4 h-4" />
                 </button>
@@ -269,11 +278,11 @@ export default function RubricTemplateEditForm({
               {level.range.map((val:any, j:any) => (
                 <input
                   key={j}
+                  className="w-16 border px-2 py-1 rounded"
+                  placeholder="Range"
                   type="number"
                   value={val}
                   onChange={(e) => handleRangeValueChange(i, j, e.target.value)}
-                  className="w-16 border px-2 py-1 rounded"
-                  placeholder="Range"
                 />
               ))}
             </div>
@@ -293,7 +302,7 @@ export default function RubricTemplateEditForm({
                 {level.label}
               </th>
             ))}
-            <th className="border p-2 bg-gray-100"></th>
+            <th className="border p-2 bg-gray-100" />
           </tr>
         </thead>
         <tbody>
@@ -301,25 +310,25 @@ export default function RubricTemplateEditForm({
             <tr key={i}>
               <td className="border p-2">
                 <input
+                  className="w-full border px-2 py-1 rounded"
+                  placeholder="Criterion name"
                   type="text"
                   value={c.name}
                   onChange={(e) =>
                     handleCriteriaChange(i, "name", e.target.value)
                   }
-                  className="w-full border px-2 py-1 rounded"
-                  placeholder="Criterion name"
                 />
               </td>
               <td className="border p-2 text-center">
                 <input
-                  type="number"
-                  min={0}
+                  className="w-16 border px-1 py-1 rounded text-center"
                   max={100}
+                  min={0}
+                  type="number"
                   value={c.weight}
                   onChange={(e) =>
                     handleCriteriaChange(i, "weight", e.target.value)
                   }
-                  className="w-16 border px-1 py-1 rounded text-center"
                 />
               </td>
 
@@ -327,7 +336,7 @@ export default function RubricTemplateEditForm({
                 <td key={j} className="border text-center">
                   <div className="flex justify-center gap-1">
                     {level.range.map((val:any, k:any) => (
-                      <label
+                      <div
                         key={val}
                         className={`inline-block w-5 h-5 rounded cursor-pointer border-2 ${
                           scores[c.name] === val
@@ -336,14 +345,14 @@ export default function RubricTemplateEditForm({
                         }`}
                       >
                         <input
-                          type="radio"
-                          name={`criteria-${i}`}
-                          value={val}
                           checked={scores[c.name] === val}
-                          onChange={() => handleSelect(c.name, val)}
                           className="sr-only"
+                          name={`criteria-${i}`}
+                          type="radio"
+                          value={val}
+                          onChange={() => handleSelect(c.name, val)}
                         />
-                      </label>
+                      </div>
                     ))}
                   </div>
                 </td>
@@ -351,9 +360,9 @@ export default function RubricTemplateEditForm({
 
               <td className="border text-center">
                 <button
+                  className="text-red-500 hover:text-red-700"
                   type="button"
                   onClick={() => removeCriterion(i)}
-                  className="text-red-500 hover:text-red-700"
                 >
                   <TrashIcon className="w-4 h-4" />
                 </button>
@@ -365,9 +374,9 @@ export default function RubricTemplateEditForm({
 
       <div className="flex justify-between items-center mt-4">
         <button
+          className="flex items-center gap-1 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
           type="button"
           onClick={addCriterion}
-          className="flex items-center gap-1 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
         >
           <PlusIcon className="w-4 h-4" />
           Add Criterion
@@ -398,12 +407,12 @@ export default function RubricTemplateEditForm({
       </button> */}
       <div className="flex justify-end">
         <button
+          className="w-fit bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
           onClick={(e) => {
             e.preventDefault();
             handleUpdateRubric(rubric._id); // call save handler
             onClose();
           }}
-          className="w-fit bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
         >
           Update
         </button>

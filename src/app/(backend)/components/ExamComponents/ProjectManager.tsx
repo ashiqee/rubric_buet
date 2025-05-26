@@ -1,8 +1,10 @@
-import { Project } from "@/types/models";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { useState } from "react";
+
 import AssessmentManager from "./AssessmentManager";
+
+import { Project } from "@/types/models";
 
 export default function ProjectManager({
   onChange,
@@ -20,6 +22,7 @@ export default function ProjectManager({
 
   const updateProject = (index: number, updated: Project) => {
     const newProjects = [...projects];
+
     newProjects[index] = updated;
     setProjects(newProjects);
     onChange(newProjects);
@@ -27,14 +30,14 @@ export default function ProjectManager({
 
   return (
     <div className="space-y-4">
-      <Button variant="bordered" size="sm" onPress={addProject}>Add Project +</Button>
+      <Button size="sm" variant="bordered" onPress={addProject}>Add Project +</Button>
       {projects.map((p, idx) => (
         <div key={idx} className="border p-2 space-y-3">
           <Input
-            label="Project Name"
             className="border rounded-md"
-            variant="underlined"
+            label="Project Name"
             value={p.name}
+            variant="underlined"
             onChange={(e) => {
               updateProject(idx, { ...p, name: e.target.value });
             }}

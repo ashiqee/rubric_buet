@@ -1,9 +1,10 @@
 // app/api/exams/route.ts
 
+import { NextRequest, NextResponse } from 'next/server';
+
 import Exam from '@/lib/models/Exam';
 import Project from '@/lib/models/Project';
 import { connectDB } from '@/lib/mongoose';
-import { NextRequest, NextResponse } from 'next/server';
  // Your Project model
 
 export async function POST(req: NextRequest) {
@@ -33,6 +34,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error(error);
+
     return NextResponse.json({ message: 'Failed to create exam', error }, { status: 500 });
   }
 }
@@ -49,6 +51,7 @@ export async function GET() {
     return NextResponse.json(exams);
   } catch (error) {
     console.error("Error fetching exams:", error);
+
     return NextResponse.json(
       { message: "Failed to fetch exams", error },
       { status: 500 }

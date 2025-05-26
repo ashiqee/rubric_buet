@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { Student } from "@/types/models";
+
 import { fetchStudents } from "../../lib/api";
+
+import { Student } from "@/types/models";
 
 const animatedComponents = makeAnimated();
 
@@ -19,13 +21,13 @@ export default function StudentSelect({
 }: {
   onSelect: (students: Student[]) => void;
 }) {
-  const [ids, setIds] = useState<string>("");
+  // const [ids, setIds] = useState<string>("");
   const [year, setYear] = useState<number | "">("");
   const [studentOptions, setStudentOptions] = useState<StudentOption[]>([]);
 
   const search = async () => {
     const students = await fetchStudents({
-      ids: ids ? ids.split(",").map((id) => id.trim()) : undefined,
+      // ids: ids ? ids.split(",").map((id) => id.trim()) : undefined,
       year: year ? Number(year) : undefined,
     });
 
@@ -64,17 +66,18 @@ export default function StudentSelect({
         }
       <Select<StudentOption, true>
         isMulti
+        closeMenuOnSelect={false}
+        components={animatedComponents}
         menuPortalTarget={document.body}
+        options={studentOptions}
+        placeholder="Select Students"
         styles={{
           menuPortal: (base) => ({ ...base, zIndex: 9999 }),
         }}
-        closeMenuOnSelect={false}
-        components={animatedComponents}
-        options={studentOptions}
-        placeholder="Select Students"
         onChange={(selected) => {
           if (selected) {
             const selectedStudents = selected.map((s) => s.data);
+
             onSelect(selectedStudents);
           } else {
             onSelect([]);

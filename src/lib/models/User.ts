@@ -36,8 +36,10 @@ userSchema.statics.comparePassword = async function (
 // Static method to hash password
 userSchema.statics.hashPassword = async function (password: string) {
   const salt = await bcrypt.genSalt(10);
+
   return bcrypt.hash(password, salt);
 };
 
 const User = mongoose.models.User as IUserModel || mongoose.model<IUser, IUserModel>('User', userSchema);
+
 export default User;

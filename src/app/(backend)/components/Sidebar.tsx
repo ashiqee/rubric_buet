@@ -1,8 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+
 import { menuLinks } from '../lib/menuLinks';
+
 import SidebarLink from './SidebarLink';
+
 import { Logo } from '@/components/icons';
 
 export default function Sidebar() {

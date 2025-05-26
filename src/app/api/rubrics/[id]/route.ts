@@ -1,20 +1,21 @@
 // app/api/rubrics/route.ts
 import { NextResponse } from 'next/server';
+
 import { connectDB } from '@/lib/mongoose';
 import { Rubric } from '@/lib/models/Rubric';
 
 
 // Upadte Rubric 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   await connectDB();
   try {
     const body = await req.json();
 
-    const rubricId =  params.id
+    const {id} = await params
     
 
     
-    const updatedRubric = await Rubric.findByIdAndUpdate(rubricId, body, {
+    const updatedRubric = await Rubric.findByIdAndUpdate(id, body, {
       new: true,
       runValidators: true,
     });
@@ -34,10 +35,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
 
 // delete rubric temp 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
   await connectDB();
+  const {id}= await params;
+
   try {
-    const deletedRubric = await Rubric.findByIdAndDelete(params.id);
+    const deletedRubric = await Rubric.findByIdAndDelete(id);
 
     if (!deletedRubric) {
       return NextResponse.json({ error: 'Rubric not found' }, { status: 404 });

@@ -18,7 +18,7 @@ export default function StudentAddModal() {
   return (
     <>
       <Button className="w-fit" onPress={onOpen}>Add New Student</Button>
-      <Modal size="5xl" className="container mx-auto" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal className="container mx-auto" isOpen={isOpen} size="5xl" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>

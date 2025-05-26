@@ -1,5 +1,6 @@
 // app/api/rubrics/route.ts
 import { NextResponse } from 'next/server';
+
 import { connectDB } from '@/lib/mongoose';
 import { Rubric } from '@/lib/models/Rubric';
 
@@ -9,6 +10,7 @@ export async function GET() {
   try {
     await connectDB();
     const rubrics = await Rubric.find().sort({ createdAt: -1 });
+
     return NextResponse.json(rubrics, { status: 200 });
   } catch (error) {
     return NextResponse.json(
@@ -25,6 +27,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     
     const rubric = await Rubric.create(body);
+
     console.log(rubric,"body");
 
 

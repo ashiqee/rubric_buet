@@ -1,5 +1,7 @@
 import Link from "next/link";
+
 import Sidebar from "../components/Sidebar";
+
 import { RubricNavbar } from "@/components/RubricNavbar";
 
 export default function DashboardLayout({

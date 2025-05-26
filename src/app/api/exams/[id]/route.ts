@@ -1,16 +1,16 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { connectDB } from "@/lib/mongoose";
 import Exam from "@/lib/models/Exam";
-
-
 import Project from "@/lib/models/Project";
- // Add this if not already
-
-import { NextRequest, NextResponse } from "next/server";
 import { Course } from "@/lib/models/Course";
 import { Rubric } from "@/lib/models/Rubric";
 import { Student } from "@/lib/models/Student";
 
-export async function GET(request: NextRequest,{ params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectDB();
 
@@ -44,6 +44,7 @@ export async function GET(request: NextRequest,{ params }: { params: Promise<{ i
     return NextResponse.json(exam);
   } catch (error) {
     console.error("Error fetching exam:", error);
+
     return NextResponse.json(
       { message: "Failed to fetch exam", error },
       { status: 500 }

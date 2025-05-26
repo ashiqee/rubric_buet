@@ -1,10 +1,12 @@
 "use client";
-import { Course, Project, Student } from '@/types/models';
 import { useState } from 'react';
+import { Button } from '@heroui/button';
+
 import CourseSelect from '../ExamComponents/CourseSelect';
 import StudentSelect from '../ExamComponents/StudentSelect';
 import ProjectManager from '../ExamComponents/ProjectManager';
-import { Button } from '@heroui/button';
+
+import { Course, Project, Student } from '@/types/models';
 
 
 export default function CreateExam() {

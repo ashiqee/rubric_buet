@@ -1,8 +1,9 @@
 
 
+import { NextResponse } from "next/server";
+
 import { Student } from "@/lib/models/Student";
 import { connectDB } from "@/lib/mongoose";
-import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   await connectDB();
@@ -10,6 +11,7 @@ export async function POST(req: Request) {
 
   try {
     const newStudent = await Student.create(data);
+
     return NextResponse.json(newStudent, { status: 201 });
   } catch (error) {
     return NextResponse.json({ message: "Failed to add Student", error }, { status: 500 });
@@ -27,6 +29,7 @@ export async function GET(request: Request) {
     await connectDB();
 
     let filter: any = {};
+
     if (year) {
       filter.admission_year = Number(year);
     }
@@ -39,6 +42,7 @@ export async function GET(request: Request) {
     return NextResponse.json(students);
   } catch (error) {
     console.error("Error fetching students:", error);
+
     return NextResponse.json({ message: "Failed to fetch students", error }, { status: 500 });
   }
 }

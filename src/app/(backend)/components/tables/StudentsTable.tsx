@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
  import { FiEdit, FiTrash2 } from "react-icons/fi"; // Feather icons
+
 import CourseEditModal from "../modals/courseModal/CourseEditModal";
 import StudentDataEditModal from "../modals/StudentsModal/StudentDataEditModal";
 
@@ -27,8 +28,10 @@ export default function StudentsTable() {
     const fetchStudents = async () => {
       try {
         const res = await fetch("/api/students");
+
         if (!res.ok) throw new Error("Failed to fetch Students");
         const data = await res.json();
+
         setStudents(data);
         setFilteredStudents(data);
       } catch (err) {
@@ -48,6 +51,7 @@ export default function StudentsTable() {
         student.name.toLowerCase().includes(lowerSearch) ||
         student.student_id.toLowerCase().includes(lowerSearch)
     );
+
     setFilteredStudents(filtered);
   }, [searchTerm, Students]);
 
@@ -79,9 +83,9 @@ const handleDelete = async (id: string) => {
       <h2 className="text-lg font-semibold mb-4">Students List</h2>
 
       <input
-        type="text"
-        placeholder="Search by Name or Student ID..."
         className="w-full p-2 border border-gray-300 rounded mb-4"
+        placeholder="Search by Name or Student ID..."
+        type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -124,9 +128,9 @@ const handleDelete = async (id: string) => {
             <StudentDataEditModal student={student}/>
          
           <button
-            onClick={() => handleDelete(student._id)}
             className="text-red-600 hover:text-red-800"
             title="Delete"
+            onClick={() => handleDelete(student._id)}
           >
             <FiTrash2 size={18} />
           </button>

@@ -23,6 +23,7 @@ export default function ImportCourseCSV({onClose}:{onClose:any}) {
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (!file) return;
 
     setFileName(file.name);
@@ -34,8 +35,10 @@ export default function ImportCourseCSV({onClose}:{onClose:any}) {
         const seen = new Set<string>();
         const uniqueCourses = results.data.filter((course) => {
           const key = `${course.c_CourseID}-${course.c_CourseTitle}`;
+
           if (seen.has(key)) return false;
           seen.add(key);
+
           return true;
         });
 
@@ -58,6 +61,7 @@ export default function ImportCourseCSV({onClose}:{onClose:any}) {
     );
 
     const results = await Promise.all(responses.map(res => res.json()));
+
     alert("Succesfully Imported Courses")
     console.log("Imported Courses:", results);
     onClose()
@@ -72,6 +76,7 @@ export default function ImportCourseCSV({onClose}:{onClose:any}) {
     const blob = new Blob([sampleCSV], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
+
     link.href = url;
     link.setAttribute("download", "course_template.csv");
     document.body.appendChild(link);
@@ -85,13 +90,13 @@ export default function ImportCourseCSV({onClose}:{onClose:any}) {
       <div className="relative">
       
         <div className="flex items-center justify-between">
-          <label className="block text-sm font-medium mb-1">
+          <p className="block text-sm font-medium mb-1">
             Upload CSV File
-          </label>{" "}
+          </p>
           <div>
             <button
-              onClick={handleDownloadTemplate}
               className="text-sm text-blue-400 font-medium mb-1"
+              onClick={handleDownloadTemplate}
             >
               Example CSV
             </button>
@@ -100,10 +105,10 @@ export default function ImportCourseCSV({onClose}:{onClose:any}) {
 
        
         <Input
-          type="file"
           accept=".csv"
-          onChange={handleFileUpload}
           className="file:bg-blue-500 file:text-white file:rounded file:px-4 file:py-1"
+          type="file"
+          onChange={handleFileUpload}
         />
         {fileName && (
           <p className="text-sm text-gray-500 mt-1">Selected: {fileName}</p>

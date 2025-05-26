@@ -12,7 +12,7 @@ const criteriaList = [
 
 const ratingLevels = ['Excellent', 'Very Good', 'Good', 'Average', 'Below Average', 'Unacceptable'];
 
-const RubricForm = ({student}:{student:string}) => {
+const RubricForm = ({student}:{student:any}) => {
   const [scores, setScores] = useState<Record<string, string>>({});
 
   const handleSelect = (criterion: string, level: string) => {
@@ -21,12 +21,15 @@ const RubricForm = ({student}:{student:string}) => {
 
   const calculateScore = () => {
     let total = 0;
+
     criteriaList.forEach(({ name, weight }) => {
       const level = scores[name];
       const multiplier = ratingLevels.indexOf(level); // Excellent = 0
       const ratingValue = 5 - multiplier; // Excellent = 5, Unacceptable = 0
+
       total += (ratingValue / 5) * weight;
     });
+
     return total.toFixed(2);
   };
 
@@ -52,10 +55,10 @@ const RubricForm = ({student}:{student:string}) => {
               {ratingLevels.map(level => (
                 <td key={level} className="border p-2 text-center">
                   <input
-                    type="radio"
-                    name={name}
-                    value={level}
                     checked={scores[name] === level}
+                    name={name}
+                    type="radio"
+                    value={level}
                     onChange={() => handleSelect(name, level)}
                   />
                 </td>
@@ -70,8 +73,8 @@ const RubricForm = ({student}:{student:string}) => {
           Total Score: <span className="font-bold">{calculateScore()}</span>
         </div>
         <button
-          type="submit"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          type="submit"
           onClick={(e) => {
             e.preventDefault();
             alert(`Submitted. Score: ${calculateScore()}`);

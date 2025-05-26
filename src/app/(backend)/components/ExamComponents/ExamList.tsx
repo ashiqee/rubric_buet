@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/react";
 import { useRouter } from "next/navigation";
@@ -39,6 +38,7 @@ export default function ExamListPage() {
       try {
         const res = await fetch("/api/exams");
         const data = await res.json();
+
         setExams(data);
       } catch (error) {
         console.error("Error fetching exams:", error);
@@ -90,7 +90,7 @@ export default function ExamListPage() {
                 <p className="text-xs text-gray-400">
                   Created on: {new Date(exam.createdAt).toLocaleString()}
                 </p>
-                <Button onPress={()=>router.push(`exams/${exam._id}`)} size="sm">Start Exam</Button>
+                <Button size="sm" onPress={()=>router.push(`exams/${exam._id}`)}>Start Exam</Button>
               </CardBody>
             </Card>
           ))}

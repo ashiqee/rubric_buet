@@ -8,6 +8,7 @@ import {
   Button,
   useDisclosure,
 } from "@heroui/react";
+
 import CreateCourseForm from "../../form/CreateCourseForm";
 import ImportCourseCSV from "../../imports/ImportCourseCSV";
 import ImportStudentsCSV from "../../imports/ImportStudentsCSV";
@@ -19,7 +20,7 @@ export default function StudentDataImportModal() {
   return (
     <>
       <Button className="w-fit" onPress={onOpen}>Bluk import</Button>
-      <Modal size="full" className="bg-opacity-0"  isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal className="bg-opacity-0" isOpen={isOpen}  size="full" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>

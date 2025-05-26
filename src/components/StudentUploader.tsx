@@ -2,6 +2,7 @@
 
 import { SetStateAction, useState } from 'react';
 import Papa from 'papaparse';
+
 import RubricForm from './RubricForm'; // Reuse previous RubricForm
 
 type Student = {
@@ -17,6 +18,7 @@ export default function StudentUploader() {
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (!file) return;
 
     Papa.parse<Student>(file, {
@@ -31,7 +33,7 @@ export default function StudentUploader() {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-4">Upload Student CSV</h2>
-      <input type="file" accept=".csv" onChange={handleFileUpload} className="mb-4" />
+      <input accept=".csv" className="mb-4" type="file" onChange={handleFileUpload} />
 
       {students.length > 0 && (
         <table className="w-full border text-sm mt-4">

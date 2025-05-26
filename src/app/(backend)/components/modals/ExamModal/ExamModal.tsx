@@ -8,7 +8,9 @@ import {
   Button,
   useDisclosure,
 } from "@heroui/react";
+
 import { Rubric } from "../../RubricGrids";
+
 import ExamRubricModal from "./ExamRubricModal";
 
 export default function ExamModal({
@@ -25,14 +27,14 @@ export default function ExamModal({
   return (
     <>
       <div>
-        <Button onPress={onOpen} variant="bordered" size="sm" color="success">
+        <Button color="success" size="sm" variant="bordered" onPress={onOpen}>
           Start Now
         </Button>
       </div>
       <Modal
-        size="5xl"
         className="container mx-auto"
         isOpen={isOpen}
+        size="5xl"
         onOpenChange={onOpenChange}
       >
         <ModalContent>
@@ -61,7 +63,7 @@ export default function ExamModal({
             <td className="border px-4 py-2">{s.name}</td>
             <td className="border px-4 py-2">{s.student_id}</td>
             <td className="border px-4 py-2">
-              <ExamRubricModal rubric={rubric} student={s} examTitle={examTitle}/>
+              <ExamRubricModal examTitle={examTitle} rubric={rubric} student={s}/>
             </td>
           </tr>
         ))}

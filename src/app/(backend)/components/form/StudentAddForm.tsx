@@ -74,27 +74,27 @@ const handleSubmit = async (e: React.FormEvent) => {
 
 
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4 p-4">
+    <form className="grid grid-cols-2 gap-4 p-4" onSubmit={handleSubmit}>
       <Input
         label="Course Title"
         name="c_CourseTitle"
+        placeholder="Design Studio I"
         value={form.c_CourseTitle}
         onChange={handleChange}
-        placeholder="Design Studio I"
       />
       <Input
         label="Course ID"
         name="c_CourseID"
+        placeholder="ARCH 102"
         value={form.c_CourseID}
         onChange={handleChange}
-        placeholder="ARCH 102"
       />
 
       <select
+        className="border p-2 rounded"
         name="c_Group"
         value={form.c_Group}
         onChange={handleChange}
-        className="border p-2 rounded"
       >
         <option value="">Select Group</option>
         {groups.map((g) => (
@@ -105,10 +105,10 @@ const handleSubmit = async (e: React.FormEvent) => {
       </select>
 
       <select
+        className="border p-2 rounded"
         name="c_CourseProgram"
         value={form.c_CourseProgram}
         onChange={handleChange}
-        className="border p-2 rounded"
       >
         <option value="">Select Program</option>
         {programs.map((p) => (
@@ -119,10 +119,10 @@ const handleSubmit = async (e: React.FormEvent) => {
       </select>
 
       <select
+        className="border p-2 rounded"
         name="c_OfferTo"
         value={form.c_OfferTo}
         onChange={handleChange}
-        className="border p-2 rounded"
       >
         <option value="">Offer To</option>
         {c_OfferTo.map((o) => (
@@ -133,10 +133,10 @@ const handleSubmit = async (e: React.FormEvent) => {
       </select>
 
       <select
+        className="border p-2 rounded"
         name="c_CourseType"
         value={form.c_CourseType}
         onChange={handleChange}
-        className="border p-2 rounded"
       >
         <option value="">Course Type</option>
         {courseTypes.map((t) => (
@@ -149,27 +149,27 @@ const handleSubmit = async (e: React.FormEvent) => {
       <Input
         label="Credits"
         name="c_Credits"
-        value={form.c_Credits}
-        onChange={handleChange}
         placeholder="6"
         type="number"
+        value={form.c_Credits}
+        onChange={handleChange}
       />
       <Input
         label="Credit Hours"
         name="c_CreditHours"
+        placeholder="9 Hrs/WK"
         value={form.c_CreditHours}
         onChange={handleChange}
-        placeholder="9 Hrs/WK"
       />
       <Textarea
+        className="col-span-2"
         name="c_Prerequisite"
+        placeholder="None"
         value={form.c_Prerequisite}
         onChange={handleChange}
-        placeholder="None"
-        className="col-span-2"
       />
 
-      <Button type="submit" className="col-span-2 w-full">
+      <Button className="col-span-2 w-full" type="submit">
         Add New Student
       </Button>
     </form>

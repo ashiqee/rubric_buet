@@ -8,6 +8,7 @@ import {
   Button,
   useDisclosure,
 } from "@heroui/react";
+
 import RubricTemplateForm from "../RubricsTemplateCreate";
 
 export default function RubricCreateModal() {
@@ -16,7 +17,7 @@ export default function RubricCreateModal() {
   return (
     <>
       <Button className="w-fit" onPress={onOpen}>Create New Rubric</Button>
-      <Modal size="5xl" className="container mx-auto" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal className="container mx-auto" isOpen={isOpen} size="5xl" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>

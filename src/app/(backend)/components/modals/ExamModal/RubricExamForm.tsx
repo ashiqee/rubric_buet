@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
+
 import { Student } from "@/types/models";
 
 
@@ -57,6 +58,7 @@ export default function RubricExamForm({
     value: string
   ) => {
     const updated = [...criteria];
+
     if (field === "weight") {
       updated[index].weight = Number(value);
     } else {
@@ -70,6 +72,7 @@ export default function RubricExamForm({
   };
   const handleRatingChange = (index: number, value: string) => {
     const updated = [...ratingLevels];
+
     updated[index].label = value;
     setRatingLevels(updated);
   };
@@ -80,12 +83,14 @@ export default function RubricExamForm({
     newValue: string
   ) => {
     const updated = [...ratingLevels];
+
     updated[levelIndex].range[valueIndex] = Number(newValue);
     setRatingLevels(updated);
   };
 
   const handleCountChange = (index: number, newCountStr: string) => {
     const newCount = Number(newCountStr);
+
     if (isNaN(newCount) || newCount <= 0) return;
 
     const updated = [...ratingLevels];
@@ -113,6 +118,7 @@ export default function RubricExamForm({
 
   const removeCriterion = (index: number) => {
     const updated = [...criteria];
+
     updated.splice(index, 1);
     setCriteria(updated);
   };
@@ -133,6 +139,7 @@ export default function RubricExamForm({
       return alert("At least two rating levels are required.");
 
     const updated = [...ratingLevels];
+
     updated.splice(index, 1);
     setRatingLevels(updated);
 
@@ -142,6 +149,7 @@ export default function RubricExamForm({
         updated.some((r) => r.range.includes(v)) ? [k, v] : [k, 0]
       )
     );
+
     setScores(cleanedScores);
   };
 
@@ -170,6 +178,7 @@ export default function RubricExamForm({
     if (score >= 55) return "B-";
     if (score >= 50) return "C";
     if (score >= 45) return "D";
+
     return "F";
   };
 
@@ -195,6 +204,7 @@ export default function RubricExamForm({
     if (!res.ok) throw new Error("Failed to update rubric");
 
     const data = await res.json();
+
     alert("Rubric updated successfully!");
     // setRubric(data)
     // console.log("Updated rubric:", data);
@@ -234,7 +244,7 @@ export default function RubricExamForm({
                 {level.label}
               </th>
             ))}
-            <th className="border p-2 bg-gray-100"></th>
+            <th className="border p-2 bg-gray-100" />
           </tr>
         </thead>
         <tbody>
@@ -246,15 +256,15 @@ export default function RubricExamForm({
               </td>
               <td className="border p-2 text-center">
                 <input
-                  type="number"
-                  min={0}
-                  max={100}
                   readOnly
+                  className="w-16 border px-1 py-1 rounded text-center"
+                  max={100}
+                  min={0}
+                  type="number"
                   value={c.weight}
                   onChange={(e) =>
                     handleCriteriaChange(i, "weight", e.target.value)
                   }
-                  className="w-16 border px-1 py-1 rounded text-center"
                 />
               </td>
 
@@ -262,7 +272,7 @@ export default function RubricExamForm({
                 <td key={j} className="border text-center">
                   <div className="flex justify-center gap-1">
                     {level.range.map((val:any, k:any) => (
-                      <label
+                      <div
                         key={val}
                         className={`inline-block w-5 h-5 rounded cursor-pointer border-2 ${
                           scores[c.name] === val
@@ -271,14 +281,14 @@ export default function RubricExamForm({
                         }`}
                       >
                         <input
-                          type="radio"
-                          name={`criteria-${i}`}
-                          value={val}
                           checked={scores[c.name] === val}
-                          onChange={() => handleSelect(c.name, val)}
                           className="sr-only"
+                          name={`criteria-${i}`}
+                          type="radio"
+                          value={val}
+                          onChange={() => handleSelect(c.name, val)}
                         />
-                      </label>
+                      </div>
                     ))}
                   </div>
                 </td>
@@ -318,12 +328,12 @@ export default function RubricExamForm({
       </button> */}
       <div className="flex justify-end">
         <button
+          className="w-fit bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
           onClick={(e) => {
             e.preventDefault();
             handleUpdateRubric(rubric._id); // call save handler
             onClose();
           }}
-          className="w-fit bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4"
         >
           Submit
         </button>

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { fetchCourses } from '../../lib/api';
-import { Course } from '@/types/models';
 import Select from 'react-select';
+
+import { fetchCourses } from '../../lib/api';
+
+import { Course } from '@/types/models';
 
 interface CourseOption {
   label: string;
@@ -21,6 +23,7 @@ export default function CourseSelect({ onSelect }: { onSelect: (course: Course) 
         value: course._id,
         data: course
       }));
+
       setOptions(mapped);
     });
   }, []);
@@ -28,13 +31,13 @@ export default function CourseSelect({ onSelect }: { onSelect: (course: Course) 
   return (
     <Select
    
+      isClearable
+      isSearchable
       options={options}
       placeholder="Select Course"
       onChange={(selected) => {
         if (selected) onSelect((selected as CourseOption).data);
       }}
-      isClearable
-      isSearchable
     />
   );
 }

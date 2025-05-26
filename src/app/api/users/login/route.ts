@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+
 import { connectDB } from '@/lib/mongoose';
 import User from '@/lib/models/User';
 
@@ -14,6 +15,7 @@ export async function POST(req: Request) {
   }
 
   const isMatch = await User.comparePassword(password, user.password);
+
   if (!isMatch) {
     return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
   }

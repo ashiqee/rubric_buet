@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@heroui/button';
+
 import RubricCreateModal from '@/app/(backend)/components/modals/RubricCreateModal';
 import RubricEditModal from '@/app/(backend)/components/modals/RubricEditModal';
 import ExamModal from '@/app/(backend)/components/modals/ExamModal/ExamModal';
@@ -27,6 +28,7 @@ export default function ExamStartPage() {
       try {
         const res = await fetch(`/api/exams/${examId}`);
         const data = await res.json();
+
         setExam(data);
         setLoading(false);
       } catch (err) {
