@@ -5,16 +5,16 @@ import Exam from "@/lib/models/Exam";
 import Project from "@/lib/models/Project";
  // Add this if not already
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Course } from "@/lib/models/Course";
 import { Rubric } from "@/lib/models/Rubric";
 import { Student } from "@/lib/models/Student";
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest,{ params }: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
 
-    const { id } = params;
+    const { id } = await params;
 
     const exam = await Exam.findById(id)
       .populate({
