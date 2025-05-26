@@ -1,7 +1,7 @@
 
-import { Student } from "@/lib/models/Student";
 import { connectDB } from "@/lib/mongoose";
 import { NextResponse } from "next/server";
+import { Student } from "@/lib/models/Student";
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   await connectDB();

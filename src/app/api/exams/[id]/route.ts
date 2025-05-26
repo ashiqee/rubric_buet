@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/mongoose";
 import Exam from "@/lib/models/Exam";
-import Student from "@/lib/models/Student";
+
 
 import Project from "@/lib/models/Project";
  // Add this if not already
@@ -8,6 +8,7 @@ import Project from "@/lib/models/Project";
 import { NextResponse } from "next/server";
 import { Course } from "@/lib/models/Course";
 import { Rubric } from "@/lib/models/Rubric";
+import { Student } from "@/lib/models/Student";
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
@@ -18,19 +19,18 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     const exam = await Exam.findById(id)
       .populate({
         path: "course",
-        select: "c_CourseTitle c_CourseID c_Group c_CourseProgram c_OfferTo c_CourseType c_Credits c_CreditHours c_Prerequisite",
+        select: "c_CourseTitle c_CourseID c_Group c_CourseProgram c_OfferTo",
         model: Course, // Explicitly add model
       })
       .populate({
         path: "students",
-        select: "student_id name email mobile_no department level_term admission_year status",
+        select: "student_id name level_term admission_year status",
         model: Student, // Explicitly add model
       })
       .populate({
         path: "projects",
         populate: {
           path: "assessments.rubricId",
-          select: "name description",
           model: Rubric, // Explicitly add model
         },
         model: Project, // Explicitly add model

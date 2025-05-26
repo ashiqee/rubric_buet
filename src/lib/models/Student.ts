@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 
 const StudentSchema = new Schema(
   {
@@ -18,6 +18,5 @@ const StudentSchema = new Schema(
   { timestamps: true }
 );
 
-const Student = mongoose.models.Student || mongoose.model("Student", StudentSchema);
-
-export default Student;
+// Export model, preventing recompilation error in Next.js
+export const Student = models.Student || model("Student", StudentSchema);
