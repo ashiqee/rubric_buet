@@ -18,13 +18,27 @@ export async function POST(req: Request) {
 
 
 
-export async function GET() {
-  await connectDB();
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const year = searchParams.get("year");
+  const ids = searchParams.get("ids")?.split(",");
 
   try {
-    const students = await Student.find().sort({ createdAt: -1 });
+    await connectDB();
+
+    let filter: any = {};
+    if (year) {
+      filter.admission_year = Number(year);
+    }
+    if (ids) {
+      filter.student_id = { $in: ids };
+    }
+
+    const students = await Student.find(filter).sort({ createdAt: -1 });
+
     return NextResponse.json(students);
   } catch (error) {
+    console.error("Error fetching students:", error);
     return NextResponse.json({ message: "Failed to fetch students", error }, { status: 500 });
   }
 }

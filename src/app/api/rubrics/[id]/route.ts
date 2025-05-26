@@ -12,7 +12,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
     const rubricId =  params.id
     
-    console.log(rubricId,"IDDDD-----");
+
     
     const updatedRubric = await Rubric.findByIdAndUpdate(rubricId, body, {
       new: true,
