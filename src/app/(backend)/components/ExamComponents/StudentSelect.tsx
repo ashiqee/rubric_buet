@@ -56,8 +56,12 @@ export default function StudentSelect({
         >
           Student Data Fetch
         </button>
-      </div>
 
+        
+      </div>
+{
+          studentOptions.length > 0 && <p className="text-gray-400">Get {studentOptions.length} Student Data</p>
+        }
       <Select<StudentOption, true>
         isMulti
         menuPortalTarget={document.body}
