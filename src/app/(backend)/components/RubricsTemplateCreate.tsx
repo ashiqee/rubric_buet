@@ -351,23 +351,25 @@ const handleRangeValueChange = (
         const key = `level-${j}-val-${val}-${k}`; // ensure stable unique key
 
         return (
-          <div
-            key={key}
-            className={`inline-block w-5 h-5 rounded cursor-pointer border-2 ${
-              scores[c.name] === val
-                ? `${ratingColors[j % ratingColors.length]} border-black`
-                : "border-gray-300"
-            }`}
-          >
-            <input
-              checked={scores[c.name] === val}
-              className="sr-only"
-              name={`criteria-${i}`}
-              type="radio"
-              value={val}
-              onChange={() => handleSelect(c.name, val)}
-            />
-          </div>
+          <label
+  key={val}
+  aria-label={`Select rating ${val} for ${c.name}`}
+  className={`inline-block w-5 h-5 rounded cursor-pointer border-2 ${
+    scores[c.name] === val
+      ? `${ratingColors[j % ratingColors.length]} border-black`
+      : "border-gray-300"
+  }`}
+>
+  <input
+    checked={scores[c.name] === val}
+    className="sr-only"
+    name={`criteria-${i}`}
+    type="radio"
+    value={val}
+    onChange={() => handleSelect(c.name, val)}
+  />
+</label>
+
         );
       })}
     </div>

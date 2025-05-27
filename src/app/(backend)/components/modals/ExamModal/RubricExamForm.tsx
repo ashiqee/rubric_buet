@@ -5,7 +5,6 @@ import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 import { Student } from "@/types/models";
 
-
 const defaultCriteria = [
   { name: "Conceptual Framework", weight: 30 },
   { name: "Site Planning", weight: 30 },
@@ -35,14 +34,13 @@ export default function RubricExamForm({
   rubric,
   onClose,
   examTitle,
-  student
+  student,
 }: {
   rubric: any;
   onClose: any;
-  examTitle:string,
-  student:Student
+  examTitle: string;
+  student: Student;
 }) {
-  
   const [criteria, setCriteria] = useState(rubric.criteria);
   const [title, setTitle] = useState(rubric.title);
   const [ratingLevels, setRatingLevels] = useState(rubric.ratingLevels);
@@ -156,7 +154,7 @@ export default function RubricExamForm({
   const calculateScore = () => {
     let total = 0;
 
-    criteria.forEach(({ name, weight }:{name:string,weight:number}) => {
+    criteria.forEach(({ name, weight }: { name: string; weight: number }) => {
       const value = scores[name]; // Might be undefined
 
       if (typeof value === "number") {
@@ -182,61 +180,55 @@ export default function RubricExamForm({
     return "F";
   };
 
- const handleUpdateRubric = async (rubricId: string) => {
-  const rubricData = {
-    criteria,
-    ratingLevels,
-    scores,
-    totalScore: Number(calculateScore()),
-    grade: getLetterGrade(Number(calculateScore())),
-    title,
+  const handleUpdateRubric = async (rubricId: string) => {
+    const rubricData = {
+      criteria,
+      ratingLevels,
+      scores,
+      totalScore: Number(calculateScore()),
+      grade: getLetterGrade(Number(calculateScore())),
+      title,
+    };
+
+    try {
+      const res = await fetch(`/api/rubrics/${rubricId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(rubricData),
+      });
+
+      if (!res.ok) throw new Error("Failed to update rubric");
+
+      const data = await res.json();
+
+      alert("Rubric updated successfully!");
+      // setRubric(data)
+      // console.log("Updated rubric:", data);
+    } catch (error) {
+      console.error("Update error:", error);
+      alert("Error updating rubric");
+    }
   };
-
-  try {
-    const res = await fetch(`/api/rubrics/${rubricId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(rubricData),
-    });
-
-    if (!res.ok) throw new Error("Failed to update rubric");
-
-    const data = await res.json();
-
-    alert("Rubric updated successfully!");
-    // setRubric(data)
-    // console.log("Updated rubric:", data);
-  } catch (error) {
-    console.error("Update error:", error);
-    alert("Error updating rubric");
-  }
-};
-
 
   return (
     <div className="p-6 m-10  rounded-xl shadow space-y-6 overflow-auto">
       <h2 className="text-2xl font-bold">{examTitle}</h2>
 
       <div className="space-y-1">
-       <h2 className="block text-lg font-semibold text-gray-700">
-       Student Name:  {student.name}
-       
-       </h2>
-       <p> Student ID: {student.student_id}</p>
-        
+        <h2 className="block text-lg font-semibold text-gray-700">
+          Student Name: {student.name}
+        </h2>
+        <p> Student ID: {student.student_id}</p>
       </div>
 
-     
-
-     
       <table className="w-full border mt-4 text-sm">
         <thead>
           <tr>
             <th className="border p-2 light:bg-gray-100">Criteria</th>
             <th className="border p-2 light:bg-gray-100">Weight</th>
-            {ratingLevels.map((level:any, i:any) => (
+            {ratingLevels.map((level: any, i: any) => (
               <th
                 key={level.label}
                 className={`border p-2 text-center ${ratingColors[i % ratingColors.length]}`}
@@ -248,11 +240,10 @@ export default function RubricExamForm({
           </tr>
         </thead>
         <tbody>
-          {criteria.map((c:any, i:any) => (
+          {criteria.map((c: any, i: any) => (
             <tr key={i}>
               <td className="border p-2">
                 <p>{c.name}</p>
-              
               </td>
               <td className="border p-2 text-center">
                 <input
@@ -268,12 +259,13 @@ export default function RubricExamForm({
                 />
               </td>
 
-              {ratingLevels.map((level:any, j:any) => (
+              {ratingLevels.map((level: any, j: any) => (
                 <td key={j} className="border text-center">
                   <div className="flex justify-center gap-1">
-                    {level.range.map((val:any, k:any) => (
-                      <div
+                    {level.range.map((val: any, k: any) => (
+                      <label
                         key={val}
+                        aria-label={`Select rating ${val} for ${c.name}`}
                         className={`inline-block w-5 h-5 rounded cursor-pointer border-2 ${
                           scores[c.name] === val
                             ? `${ratingColors[j % ratingColors.length]} border-black`
@@ -288,21 +280,17 @@ export default function RubricExamForm({
                           value={val}
                           onChange={() => handleSelect(c.name, val)}
                         />
-                      </div>
+                      </label>
                     ))}
                   </div>
                 </td>
               ))}
-
-             
             </tr>
           ))}
         </tbody>
       </table>
 
       <div className="flex justify-between items-center mt-4">
-      
-
         <div className="text-lg">
           Total Score:{" "}
           <span className="font-semibold">

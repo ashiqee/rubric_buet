@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 
-
 const defaultCriteria = [
   { name: "Conceptual Framework", weight: 30 },
   { name: "Site Planning", weight: 30 },
@@ -36,7 +35,6 @@ export default function RubricTemplateEditForm({
   rubric: any;
   onClose: any;
 }) {
-  
   const [criteria, setCriteria] = useState(rubric.criteria);
   const [title, setTitle] = useState(rubric.title);
   const [ratingLevels, setRatingLevels] = useState(rubric.ratingLevels);
@@ -150,7 +148,7 @@ export default function RubricTemplateEditForm({
   const calculateScore = () => {
     let total = 0;
 
-    criteria.forEach(({ name, weight }:{name:string,weight:number}) => {
+    criteria.forEach(({ name, weight }: { name: string; weight: number }) => {
       const value = scores[name]; // Might be undefined
 
       if (typeof value === "number") {
@@ -176,38 +174,37 @@ export default function RubricTemplateEditForm({
     return "F";
   };
 
- const handleUpdateRubric = async (rubricId: string) => {
-  const rubricData = {
-    criteria,
-    ratingLevels,
-    scores,
-    totalScore: Number(calculateScore()),
-    grade: getLetterGrade(Number(calculateScore())),
-    title,
+  const handleUpdateRubric = async (rubricId: string) => {
+    const rubricData = {
+      criteria,
+      ratingLevels,
+      scores,
+      totalScore: Number(calculateScore()),
+      grade: getLetterGrade(Number(calculateScore())),
+      title,
+    };
+
+    try {
+      const res = await fetch(`/api/rubrics/${rubricId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(rubricData),
+      });
+
+      if (!res.ok) throw new Error("Failed to update rubric");
+
+      const data = await res.json();
+
+      alert("Rubric updated successfully!");
+      // setRubric(data)
+      // console.log("Updated rubric:", data);
+    } catch (error) {
+      console.error("Update error:", error);
+      alert("Error updating rubric");
+    }
   };
-
-  try {
-    const res = await fetch(`/api/rubrics/${rubricId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(rubricData),
-    });
-
-    if (!res.ok) throw new Error("Failed to update rubric");
-
-    const data = await res.json();
-
-    alert("Rubric updated successfully!");
-    // setRubric(data)
-    // console.log("Updated rubric:", data);
-  } catch (error) {
-    console.error("Update error:", error);
-    alert("Error updating rubric");
-  }
-};
-
 
   return (
     <div className="p-6  rounded-xl shadow space-y-6 overflow-auto">
@@ -243,19 +240,22 @@ export default function RubricTemplateEditForm({
         </button>
       </div>
 
-      <div className="grid  grid-cols-1 md:grid-cols-3 flex-wrap gap-2">
-        {ratingLevels.map((level:any, i:any) => (
-          <div key={i} className="border p-2 rounded space-y-2 ">
+      <div className="grid  grid-cols-2 md:grid-cols-3 flex-wrap gap-2">
+        {ratingLevels.map((level: any, i: any) => (
+          <div
+            key={i}
+            className="border p-2 rounded space-y-2  text-[13px] md:text-md"
+          >
             <div className="flex  items-center gap-2">
               <input
-                className="border md:w-40 2xl:w-44 px-2 py-1 rounded"
+                className="border w-24 md:w-40 2xl:w-44 px-2 py-1 rounded"
                 placeholder="Label"
                 type="text"
                 value={level.label}
                 onChange={(e) => handleRatingChange(i, e.target.value)}
               />
               <input
-                className="w-16 border px-2 py-1 rounded"
+                className="md:w-16 w-10 border text-center py-1 rounded"
                 min={1}
                 placeholder="Count"
                 type="number"
@@ -273,12 +273,12 @@ export default function RubricTemplateEditForm({
               )}
             </div>
 
-            <div className="flex items-center flex-wrap gap-2">
-              Range:
-              {level.range.map((val:any, j:any) => (
+            <div className="flex  items-center flex-wrap gap-2">
+              <p>Range:</p>
+              {level.range.map((val: any, j: any) => (
                 <input
                   key={j}
-                  className="w-16 border px-2 py-1 rounded"
+                  className="md:w-16 w-12 border  p-1 rounded"
                   placeholder="Range"
                   type="number"
                   value={val}
@@ -289,12 +289,12 @@ export default function RubricTemplateEditForm({
           </div>
         ))}
       </div>
-      <table className="w-full border mt-4 text-sm">
+      <table className="w-full overflow-auto border mt-4 text-[13px] md:text-sm">
         <thead>
           <tr>
             <th className="border p-2 light:bg-gray-100">Criteria</th>
             <th className="border p-2 light:bg-gray-100">Weight</th>
-            {ratingLevels.map((level:any, i:any) => (
+            {ratingLevels.map((level: any, i: any) => (
               <th
                 key={level.label}
                 className={`border p-2 text-center ${ratingColors[i % ratingColors.length]}`}
@@ -306,7 +306,7 @@ export default function RubricTemplateEditForm({
           </tr>
         </thead>
         <tbody>
-          {criteria.map((c:any, i:any) => (
+          {criteria.map((c: any, i: any) => (
             <tr key={i}>
               <td className="border p-2">
                 <input
@@ -332,12 +332,13 @@ export default function RubricTemplateEditForm({
                 />
               </td>
 
-              {ratingLevels.map((level:any, j:any) => (
+              {ratingLevels.map((level: any, j: any) => (
                 <td key={j} className="border text-center">
                   <div className="flex justify-center gap-1">
-                    {level.range.map((val:any, k:any) => (
-                      <div
+                    {level.range.map((val: any, k: any) => (
+                      <label
                         key={val}
+                        aria-label={`Select rating ${val} for ${c.name}`}
                         className={`inline-block w-5 h-5 rounded cursor-pointer border-2 ${
                           scores[c.name] === val
                             ? `${ratingColors[j % ratingColors.length]} border-black`
@@ -352,7 +353,7 @@ export default function RubricTemplateEditForm({
                           value={val}
                           onChange={() => handleSelect(c.name, val)}
                         />
-                      </div>
+                      </label>
                     ))}
                   </div>
                 </td>
